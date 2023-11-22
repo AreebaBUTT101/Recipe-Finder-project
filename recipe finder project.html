@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Finder</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
+            background-color: rgb(160, 149, 149);
+        }
+
+        #app {
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #searchButtons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .search-button {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #45a049;
+        }
+
+        #recipeList {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .recipe {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            background-color: white;
+        }
+
+        .recipe:hover {
+            background-color: #f5f5f5;
+        }
+
+        .recipe h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .recipe p {
+            font-size: 16px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div id="searchButtons" class="mt-2">
+        <button class="search-button" onclick="searchByCuisine('Italian')">Italian</button>
+        <button class="search-button" onclick="searchByCuisine('Mexican')">Mexican</button>
+        <button class="search-button" onclick="searchByCuisine('Asian')">Asian</button>
+    </div>
+    <ul id="recipeList"></ul>
+</div>
+
+<script>
+    // Each recipe is an "object" with properties like name, ingredients, and cuisine.
+    //"Arrays" are used to store multiple recipes in the "recipes" array.
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        function fetchData() {
+            // Simulating an asynchronous operation using a Promise
+            return new Promise(resolve => {
+                setTimeout(() => {
+        const recipes = [
+            { name: "Pasta Carbonara", ingredients: ["spaghetti", "eggs", "bacon", "parmesan cheese", "black pepper"], cuisine: "Italian" },
+            { name: "Chicken Alfredo", ingredients: ["chicken", "fettuccine", "heavy cream", "butter", "parmesan cheese"], cuisine: "Italian" },
+            { name: "Margherita Pizza", ingredients: ["pizza dough", "tomato sauce", "fresh mozzarella", "basil"], cuisine: "Italian" },
+            { name: "Tacos", ingredients: ["tortillas", "ground beef", "lettuce", "tomatoes", "cheese"], cuisine: "Mexican" },
+            { name: "Guacamole", ingredients: ["avocado", "onion", "tomato", "lime", "salt"], cuisine: "Mexican" },
+            { name: "Sushi", ingredients: ["rice", "seaweed", "fish", "cucumber", "soy sauce"], cuisine: "Asian" },
+            {name: "biryani",ingredients:["onion","spices","rice","chicken","biryani masala"],cusine: "Asian"},
+        ];
+        resolve(recipes);
+                }, 1000); // Simulating a delay of 1 second
+            });
+        }
+
+        const recipeList = document.getElementById('recipeList');
+
+        document.querySelectorAll('.search-button').forEach(button => {
+            button.addEventListener('click', function () {
+                searchByCuisine(this.textContent);
+            });
+        });
+
+        function searchByCuisine(cuisine) {
+            const filteredRecipes = recipes.filter(recipe => recipe.cuisine.toLowerCase() === cuisine.toLowerCase());
+            displayRecipes(filteredRecipes);
+        }
+
+        function displayRecipes(recipesToDisplay) {
+            recipeList.innerHTML = '';
+
+            recipesToDisplay.forEach(recipe => {
+                const recipeItem = document.createElement('li');
+                recipeItem.classList.add('recipe');
+                recipeItem.innerHTML = `
+                    <h3>${recipe.name}</h3>
+                    <p>Ingredients: ${recipe.ingredients.join(', ')}</p> 
+                    //combines the ingredients array into a string, separated by commas
+                `;
+                recipeItem.addEventListener('click', () => showRecipeDetails(recipe));
+                recipeList.appendChild(recipeItem);
+            });
+        }
+
+        function showRecipeDetails(recipe) {
+            alert(`Recipe: ${recipe.name}\nIngredients: ${recipe.ingredients.join(', ')}`);
+        }
+    });
+</script>
+
+</body>
+</html>
